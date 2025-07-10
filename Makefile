@@ -1,15 +1,22 @@
 
-.PHONY: build run
+# Makefile for Rust workspace
+.PHONY: build run test lint fmt
 
+# Build all crates in debug mode
 build:
-	go build -o bin/jarvis ./cmd/jarvis
+	cargo build --workspace
 
+# Run the main web server (jarvis-web crate)
 run:
-	go run ./cmd/jarvis
+	cargo run -p jarvis-web --release
 
+# Run the full test suite
 test:
-	go test ./...
+	cargo test --workspace
 
+# Lint with clippy and rustfmt
 lint:
-	go vet ./...
-	gofmt -w .
+	cargo clippy --workspace --all-targets -- -D warnings
+
+fmt:
+	cargo fmt --all
