@@ -14,8 +14,9 @@ serde = { workspace = true }
 figment = { workspace = true }
 serde_yaml = { workspace = true }
 serde_json = { workspace = true }
-async-openai = { workspace = true }
 libsql = { workspace = true, features = ["core"] }
+async-openai = { workspace = true }
+anyhow = { workspace = true }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 thiserror = "1"
 chrono = { workspace = true }

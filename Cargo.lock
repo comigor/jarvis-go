@@ -77,25 +77,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
 
 [[package]]
-name = "async-convert"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d416feee97712e43152cd42874de162b8f9b77295b1c85e5d92725cc8310bae"
-dependencies = [
- "async-trait",
-]
-
-[[package]]
 name = "async-openai"
-version = "0.21.0"
+version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "007f03f7e27271451af57ced242d6adfa04204d1275a91ec0952bf441fd8d102"
+checksum = "31acf814d6b499e33ec894bb0fd7ddaf2665b44fbdd42b858d736449271fde0c"
 dependencies = [
- "async-convert",
+ "async-openai-macros",
  "backoff",
  "base64 0.22.1",
  "bytes",
  "derive_builder",
+ "eventsource-stream",
  "futures",
  "rand 0.8.5",
  "reqwest",
@@ -103,11 +95,22 @@ dependencies = [
  "secrecy",
  "serde",
  "serde_json",
- "thiserror 1.0.69",
+ "thiserror 2.0.12",
  "tokio",
  "tokio-stream",
  "tokio-util",
  "tracing",
+]
+
+[[package]]
+name = "async-openai-macros"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0289cba6d5143bfe8251d57b4a8cac036adf158525a76533a7082ba65ec76398"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -1292,11 +1295,13 @@ dependencies = [
 name = "jarvis-core"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "async-openai",
  "async-trait",
  "chrono",
  "figment",
  "libsql",
+ "once_cell",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -1312,6 +1317,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum 0.7.9",
+ "chrono",
  "jarvis-core",
  "serde",
  "tokio",
@@ -2272,9 +2278,9 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "secrecy"
-version = "0.8.0"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9bd1c54ea06cfd2f6b63219704de0b9b4f72dcc2b8fdef820be6cd799780e91e"
+checksum = "e891af845473308773346dc847b2c23ee78fe442e0472ac50e22a18a93d3ae5a"
 dependencies = [
  "serde",
  "zeroize",
