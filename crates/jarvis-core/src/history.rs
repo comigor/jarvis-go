@@ -2,6 +2,10 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+use tokio::sync::Mutex;
+use once_cell::sync::Lazy;
+
+static WRITE_LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::const_new(()));
 use crate::db::{get_db, DbError};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -22,6 +26,7 @@ pub enum HistoryError {
 }
 
 pub async fn save(msg: Message) -> Result<(), HistoryError> {
+    let _guard = WRITE_LOCK.lock().await;
     let db = get_db().await?;
     let conn = db.connect()?;
     conn.execute(
