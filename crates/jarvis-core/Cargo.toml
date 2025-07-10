@@ -19,5 +19,9 @@ libsql = { workspace = true, features = ["core"] }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 thiserror = "1"
 chrono = { workspace = true }
+
+[dev-dependencies]
+
+tempfile = "3"
 async-trait = "0.1"
 

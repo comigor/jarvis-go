@@ -18,7 +18,8 @@ pub async fn get_db() -> Result<&'static Database, DbError> {
 async fn init_db() -> Result<Database, DbError> {
     let path = std::env::var("HISTORY_DB_PATH").unwrap_or_else(|_| "history.db".into());
     let db = if path == ":memory:" {
-        Builder::new_local(&path).build().await?
+        // use a shared in-memory database so multiple connections see same schema
+        Builder::new_local("file:memdb?mode=memory&cache=shared").build().await?
     } else {
         if let Some(parent) = Path::new(&path).parent() {
             tokio::fs::create_dir_all(parent).await.ok();
@@ -32,6 +33,7 @@ async fn init_db() -> Result<Database, DbError> {
 }
 
 async fn init_schema(conn: &Connection) -> Result<(), DbError> {
+    println!("init_schema executed");
     conn.execute(
         "CREATE TABLE IF NOT EXISTS messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
