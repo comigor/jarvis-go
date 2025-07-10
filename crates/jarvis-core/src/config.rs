@@ -7,7 +7,13 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum ConfigError {
     #[error("configuration error: {0}")]
-    Figment(#[from] figment::Error),
+    Figment(Box<figment::Error>),
+}
+
+impl From<figment::Error> for ConfigError {
+    fn from(e: figment::Error) -> Self {
+        ConfigError::Figment(Box::new(e))
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]

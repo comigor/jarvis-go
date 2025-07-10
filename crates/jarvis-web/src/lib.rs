@@ -1,7 +1,9 @@
 //! HTTP server crate that wraps jarvis-core.
 #![deny(warnings)]
 
-use axum::{routing::post, Router};
+use axum::{routing::post, Router, extract::Json};
+use serde::{Deserialize, Serialize};
+use jarvis_core::history::{save, list, Message};
 use jarvis_core::config::Config;
 use tokio::{net::TcpListener, signal};
 use tracing::{info, Level};
@@ -33,7 +35,35 @@ async fn shutdown_signal() {
     let _ = signal::ctrl_c().await;
 }
 
-async fn handle(body: String) -> String {
-    // TODO: call agent core once implemented
-    format!("echo: {}", body)
+#[derive(Debug, Deserialize)]
+struct SaveReq {
+    session_id: String,
+    role: String,
+    content: String,
+}
+
+#[derive(Debug, Serialize)]
+struct ListResp {
+    messages: Vec<Message>,
+}
+
+async fn handle(Json(payload): Json<SaveReq>) -> Result<Json<ListResp>, axum::http::StatusCode> {
+    let msg = Message {
+        id: 0,
+        session_id: payload.session_id.clone(),
+        role: payload.role.clone(),
+        content: payload.content.clone(),
+        created_at: chrono::Utc::now(),
+    };
+    if let Err(e) = save(msg).await {
+        tracing::error!(?e, "failed to save message");
+        return Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR);
+    }
+    match list(&payload.session_id).await {
+        Ok(messages) => Ok(Json(ListResp { messages })),
+        Err(e) => {
+            tracing::error!(?e, "failed to list messages");
+            Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR)
+        }
+    }
 }

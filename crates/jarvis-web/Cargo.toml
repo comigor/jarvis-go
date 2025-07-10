@@ -11,3 +11,4 @@ tracing-subscriber = { workspace = true }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 jarvis-core = { path = "../jarvis-core" }
 serde = { workspace = true }
+chrono = { workspace = true }
