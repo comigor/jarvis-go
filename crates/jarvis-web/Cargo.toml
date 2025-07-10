@@ -1,0 +1,13 @@
+[package]
+name = "jarvis-web"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { workspace = true } 
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+jarvis-core = { path = "../jarvis-core" }
+serde = { workspace = true }

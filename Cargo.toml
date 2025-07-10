@@ -1,0 +1,22 @@
+[workspace]
+members = [
+    "crates/jarvis-core",
+    "crates/jarvis-web",
+    "crates/jarvis-cli",
+]
+resolver = "2"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.7" }
+tracing = "0.1"
+anyhow = "1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+serde = { version = "1", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+serde_yaml = "0.9"
+serde_json = "1"
+figment = { version = "0.10", features = ["yaml", "env"] }
+async-openai = "0.21"
+libsql = { version = "0.3", features = ["core"] }
+# NOTE: Versions cribbed; will adjust as needed.
